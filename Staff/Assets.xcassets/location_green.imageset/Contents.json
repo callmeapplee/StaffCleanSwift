@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "🦆 icon _Alternate Map Marker_-7.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "🦆 icon _Alternate Map Marker_-8.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "🦆 icon _Alternate Map Marker_-9.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
