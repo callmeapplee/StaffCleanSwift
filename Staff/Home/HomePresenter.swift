@@ -20,14 +20,24 @@ class HomePresenter:HomePresentationLogic {
             let topCategories = home.topCategories.map { (topCategory) in
                 HomeViewModel.TopCategoryCell.init(categoryIconUrl: topCategory.icon, categoryName: topCategory.name)
             }
-            viewController?.displayData(viewModel: .displayHome(homeViewModel:HomeViewModel.init(topCompanies: topCompanies, topCategories: topCategories) ))
-        case .presentVacancies(activeVacancies: let activeVacancies):
-            let vacancies = activeVacancies.data.map { vacancy in
+            var allCities = home.cities.map { (city) in
+                HomeViewModel.FilterPickerRow(name: city.nameRu,id: city.id)
+            }
+            var allCategories = home.topCategories.map { (category) in
+                HomeViewModel.FilterPickerRow(name: category.name, id: category.id)
+            }
+            allCities.insert(HomeViewModel.FilterPickerRow.init(name: "По умолчанию".localized()), at: 0)
+            allCategories.insert(HomeViewModel.FilterPickerRow.init(name: "По умолчанию".localized()), at: 0)
+            viewController?.displayData(viewModel: .displayHome(homeViewModel:HomeViewModel.init(topCompanies: topCompanies, topCategories: topCategories, categories: allCategories,cities: allCities) ))
+        case .presentVacancies(let vacancies, let isFiltered):
+            let vacanciesForPresent = vacancies.data.map { vacancy in
                 vacancyCellViewModel(vacancy: vacancy)
             }
-            viewController?.displayData(viewModel: .displayVacancies(activeVacancies: VacanciesViewModel(activeVacancies: vacancies)))
+            viewController?.displayData(viewModel: .displayVacancies(vacancies: VacanciesViewModel(isVacanciesFiltered: isFiltered, vacancies: vacanciesForPresent)))
+            
         case .presentFooterLoader:
             viewController?.displayData(viewModel: .displayFooterLoader)
+        
         }
     }
     private func vacancyCellViewModel(vacancy:Vacancy) -> VacanciesViewModel.VacancyCell{

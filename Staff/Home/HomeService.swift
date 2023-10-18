@@ -8,36 +8,87 @@
 import Foundation
 class HomeService {
     var fetcher:DataFetcher = NetworkDataFetcher()
-    var currentPage:Int = 1
-    var activeVacanciesResponse:VacanciesResponse?
+    private var currentPage:Int = 1
+    private var vacanciesResponse:VacanciesResponse?
+    private var filterParams:[String:Any] = [:]
+    private var isFetchingMore = true
+    private var isVacanciesFiltered:Bool {
+        return !filterParams.isEmpty
+    }
+    func setParams(params:[String:Any?]) {
+        params.forEach { (paramsKey,paramsValue) in
+            guard let value = paramsValue else {
+                self.filterParams.removeValue(forKey: paramsKey)
+                return
+            }
+            self.filterParams[paramsKey] = value
+        }
+    }
+    
     func getHome(completion : @escaping(HomeResponse)->Void) {
         fetcher.getHome { (HomeResponse) in
             guard let home = HomeResponse else { return }
             completion(home)
         }
     }
-    func getActiveVacancies( completion: @escaping(VacanciesResponse)->Void) {
-        currentPage = 1
+    private func getActiveVacancies(completion: @escaping(VacanciesResponse?)->Void) {
         fetcher.getActiveVacancies(page: currentPage) {  (activeVacanciesResponse) in
-            guard let vacanciesResponse = activeVacanciesResponse else {
-                return
-            }
-            self.activeVacanciesResponse = vacanciesResponse
-            completion(vacanciesResponse)
+            completion(activeVacanciesResponse)
         }
     }
-    func getNextBatch(completion: @escaping (VacanciesResponse) -> Void) {
-        if currentPage == activeVacanciesResponse?.currentPage {
-            currentPage += 1
-            print(currentPage)
-            fetcher.getActiveVacancies(page: currentPage) { activeVacanciesResponse in
-                guard let vacanciesResponse = activeVacanciesResponse, vacanciesResponse.data.count > 0 else {
+    private func getFilteredVacancies(completion: @escaping(VacanciesResponse?)->Void) {
+        fetcher.getFilteredVacancies(page: currentPage,params: filterParams) {  (filteredVacanciesResponse) in
+            completion(filteredVacanciesResponse)
+        }
+    }
+    func getVacancies( completion: @escaping(VacanciesResponse,Bool)->Void) {
+        currentPage = 1
+        let isFiltered = self.isVacanciesFiltered
+        if isFiltered {
+            getFilteredVacancies { filteredVacanciesResponse in
+                guard let vacanciesResponse = filteredVacanciesResponse else {
                     return
                 }
-                self.activeVacanciesResponse?.data.append(contentsOf: vacanciesResponse.data)
+                self.isFetchingMore = vacanciesResponse.data.isEmpty
+                self.vacanciesResponse = vacanciesResponse
+                completion(vacanciesResponse,isFiltered)
+            }
+        }else{
+            getActiveVacancies { activeVacanciesResponse in
+                guard let vacanciesResponse = activeVacanciesResponse else {
+                    return
+                }
+                self.isFetchingMore = vacanciesResponse.data.isEmpty
+                self.vacanciesResponse = vacanciesResponse
+                completion(vacanciesResponse,isFiltered)
             }
         }
-        guard let vacanciesResponse = self.activeVacanciesResponse else { return }
-        completion(vacanciesResponse)
+    }
+    func getNextBatch(completion: @escaping (VacanciesResponse,Bool) -> Void) {
+        let isFiltered = self.isVacanciesFiltered
+        print("current page",currentPage)
+        if !isFetchingMore {
+            isFetchingMore = true
+            currentPage += 1
+            if isFiltered {
+                getFilteredVacancies { filteredVacanciesResponse in
+                    guard let vacanciesResponse = filteredVacanciesResponse else {
+                        return
+                    }
+                    self.vacanciesResponse?.data.append(contentsOf: vacanciesResponse.data)
+                    self.isFetchingMore = vacanciesResponse.data.isEmpty
+                }
+            }else{
+                getActiveVacancies { activeVacanciesResponse in
+                    guard let vacanciesResponse = activeVacanciesResponse else {
+                        return
+                    }
+                    self.vacanciesResponse?.data.append(contentsOf: vacanciesResponse.data)
+                    self.isFetchingMore = vacanciesResponse.data.isEmpty
+                }
+            }
+        }
+        guard let vacanciesResponse = self.vacanciesResponse else { return }
+        completion(vacanciesResponse,isFiltered)
     }
 }

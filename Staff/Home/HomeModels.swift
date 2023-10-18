@@ -14,30 +14,30 @@ enum Home {
           case getHome
           case getVacancies
           case getNextBatch
+          case setParams(params:[String:Any?])
       }
     }
     struct Response {
       enum ResponseType {
           case presentHome(home:HomeResponse)
-          case presentVacancies(activeVacancies:VacanciesResponse)
+          case presentVacancies(vacancies:VacanciesResponse, isFiltered:Bool)
           case presentFooterLoader
       }
     }
     struct ViewModel {
       enum ViewModelData {
-        case displayHome(homeViewModel: HomeViewModel)
-          case displayVacancies(activeVacancies: VacanciesViewModel)
+          case displayHome(homeViewModel: HomeViewModel)
+          case displayVacancies(vacancies: VacanciesViewModel)
           case displayFooterLoader
       }
     }
   }
 }
-
-//struct UserViewModel: TitleViewViewModel {
-//    var photoUrlString: String?
-//}
-//
 struct HomeViewModel {
+    struct FilterPickerRow:FilterPickerRowViewModel {
+        var name: String
+        var id: Int?
+    }
     struct TopCategoryCell:TopCategoryCellViewModel {
         var categoryIconUrl: String
         var categoryName: String
@@ -45,11 +45,13 @@ struct HomeViewModel {
     struct TopCompanyCell: TopCompanyCellViewModel {
         var companyLogoUrl: String
     }
-    
     let topCompanies: [TopCompanyCell]
     let topCategories: [TopCategoryCell]
+    let categories: [FilterPickerRow]
+    let cities: [FilterPickerRow]
 }
 struct VacanciesViewModel {
+    var isVacanciesFiltered:Bool
     struct VacancyCell:VacancyCellViewModel {
         var name: String
         
@@ -66,6 +68,6 @@ struct VacanciesViewModel {
         var city: String
         
     }
-    var activeVacancies: [VacancyCell]
+    var vacancies: [VacancyCell]
     
 }

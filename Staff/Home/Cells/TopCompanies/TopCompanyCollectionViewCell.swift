@@ -13,10 +13,16 @@ protocol TopCompanyCellViewModel {
 }
 class TopCompanyCollectionViewCell: UICollectionViewCell {
     static let id = "TopCompanyCollectionViewCell"
+    private var iconParentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 12
+        return view
+    }()
     private var iconImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(origin: .zero, size: CGSize(width: 80, height: 80)))
-        imageView.backgroundColor = .gray
-        imageView.layer.cornerRadius = 12
+        imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
         return imageView
     }()
     override init(frame: CGRect) {
@@ -32,9 +38,13 @@ class TopCompanyCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     private func makeConstraints() {
-        contentView.addSubview(iconImageView)
-        iconImageView.snp.makeConstraints { make in
+        contentView.addSubview(iconParentView)
+        iconParentView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview()
+        }
+        iconParentView.addSubview(iconImageView)
+        iconImageView.snp.makeConstraints { make in
+            make.left.right.top.bottom.equalToSuperview().inset(10)
         }
         
     }

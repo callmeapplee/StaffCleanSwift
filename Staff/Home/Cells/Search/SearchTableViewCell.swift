@@ -7,9 +7,10 @@
 
 import UIKit
 import SnapKit
+
 class SearchTableViewCell: UITableViewCell {
     static let id = "SearchTableViewCell"
-    private var searchBar:UISearchBar = {
+    var searchBar:UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Введите название вакансии".localized()
         searchBar.searchBarStyle = .minimal
@@ -17,7 +18,7 @@ class SearchTableViewCell: UITableViewCell {
         searchBar.tintColor = UIColor.StaffColors.primary
         return searchBar
     }()
-    private var filterView:FilterView = {
+    var filterView:FilterView = {
         let filterView = FilterView(frame: CGRect(origin: .zero, size: CGSize(width: .zero, height: 43)))
         filterView.layer.cornerRadius = 12
         return filterView
@@ -28,7 +29,9 @@ class SearchTableViewCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
     }
-    
+    func setup(categories:[HomeViewModel.FilterPickerRow], cities:[HomeViewModel.FilterPickerRow]) {
+        filterView.setup(categories: categories, cities: cities)
+    }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

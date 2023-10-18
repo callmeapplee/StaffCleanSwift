@@ -18,8 +18,8 @@ enum HomeTableViewSections:CaseIterable  {
 }
 class HomeViewController: UIViewController,HomeDisplayLogic{
     private var homeViewModel:HomeViewModel = HomeViewModel(topCompanies: [],
-                                                            topCategories: [])
-    private var vacanciesViewModel:VacanciesViewModel = VacanciesViewModel(activeVacancies: [])
+                                                            topCategories: [], categories: [],cities: [])
+    private var vacanciesViewModel:VacanciesViewModel = VacanciesViewModel(isVacanciesFiltered: false, vacancies: [])
     var interactor: NewsfeedBusinessLogic?
     @IBOutlet weak var tableView: UITableView!
     private var refreshControl: UIRefreshControl = {
@@ -65,6 +65,7 @@ class HomeViewController: UIViewController,HomeDisplayLogic{
     }
     @objc private func refresh() {
         interactor?.makeRequest(request: Home.Model.Request.RequestType.getHome)
+        interactor?.makeRequest(request: Home.Model.Request.RequestType.getVacancies)
     }
     func displayData(viewModel: Home.Model.ViewModel.ViewModelData) {
         switch viewModel {
@@ -72,9 +73,10 @@ class HomeViewController: UIViewController,HomeDisplayLogic{
             self.homeViewModel = homeViewModel
             tableView.reloadData()
             refreshControl.endRefreshing()
-        case .displayVacancies(activeVacancies: let activeVacancies):
-            self.vacanciesViewModel.activeVacancies.append(contentsOf: activeVacancies.activeVacancies)
+        case .displayVacancies(vacancies: let vacancies):
+            self.vacanciesViewModel = vacancies
             tableView.reloadData()
+            footerView.hideLoader()
         case .displayFooterLoader:
             footerView.showLoader()
         }
@@ -108,12 +110,10 @@ extension HomeViewController:UITableViewDataSource {
         switch HomeTableViewSections.allCases[section] {
         case .search:
             return 1
-        case .topCategories:
-            return 1
-        case .topCompanies:
+        case .topCategories,.topCompanies:
             return 1
         case .activeVacancies:
-            return vacanciesViewModel.activeVacancies.count
+            return vacanciesViewModel.vacancies.count
         }
     }
     
@@ -122,7 +122,9 @@ extension HomeViewController:UITableViewDataSource {
         switch HomeTableViewSections.allCases[section] {
         case .search:
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as! SearchTableViewCell
-            
+            cell.setup(categories: homeViewModel.categories, cities: homeViewModel.cities)
+            cell.filterView.delegate = self
+            cell.searchBar.delegate = self
             return cell
         case .topCategories:
             let cell = tableView.dequeueReusableCell(withIdentifier: TopCategoriesTableViewCell.id, for: indexPath) as! TopCategoriesTableViewCell
@@ -134,7 +136,7 @@ extension HomeViewController:UITableViewDataSource {
             return cell
         case .activeVacancies:
             let cell = tableView.dequeueReusableCell(withIdentifier: VacancyTableViewCell.id, for: indexPath) as! VacancyTableViewCell
-            cell.setup(viewModel: vacanciesViewModel.activeVacancies[indexPath.row])
+            cell.setup(viewModel: vacanciesViewModel.vacancies[indexPath.row])
             return cell
         }
     }
@@ -213,4 +215,14 @@ extension HomeViewController:UITableViewDataSource {
         }
     }
     
+}
+extension HomeViewController:FilterViewDelegate,UISearchBarDelegate {
+    func filterDidChange(cityId: Int?, categoryId: Int?) {
+        interactor?.makeRequest(request: .setParams(params: ["city_id": cityId, "category_id":categoryId]))
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: DispatchWorkItem(block: {
+            self.interactor?.makeRequest(request: .setParams(params: ["title":searchText]))
+        }))
+    }
 }

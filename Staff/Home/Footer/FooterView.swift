@@ -27,7 +27,9 @@ class FooterView: UIView {
     func showLoader() {
         loader.startAnimating()
     }
-    
+    func hideLoader(){
+        loader.stopAnimating()
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

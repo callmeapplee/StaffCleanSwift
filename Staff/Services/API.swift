@@ -9,21 +9,25 @@ import Foundation
 import Alamofire
 enum APIRouter:URLRequestConvertible {
     static let baseURLForImageString = "http://194.26.138.61"
-    static let baseURLString = "http://194.26.138.61/api"
+    static let baseURLString = "http://194.26.138.61/api/"
     case home
     case activeVacancies(page:Int)
+    case filteredVacancies(page:Int,filterParams:[String:Any])
     var method:HTTPMethod {
         switch self {
-        case .home,.activeVacancies:
+        case .home,.activeVacancies,.filteredVacancies:
             return .get
+            
         }
     }
     var path:String {
         switch self{
         case .home:
-            return "/home"
+            return "home"
         case .activeVacancies:
-            return "/active-vacancies"
+            return "active-vacancies"
+        case .filteredVacancies:
+            return "vacancies"
         }
     }
     var parameters:Parameters? {
@@ -32,13 +36,16 @@ enum APIRouter:URLRequestConvertible {
             return [:]
         case .activeVacancies(let page):
             return ["page" : page,"per_page":15]
+        case .filteredVacancies(let page, let filterParams):
+            var params = filterParams
+            params["page"] = page
+            params["per_page"] = 15
+            return params
         }
     }
     var body:Data? {
         switch self {
-        case .home:
-            return nil
-        case .activeVacancies(_):
+        case .home,.activeVacancies,.filteredVacancies:
             return nil
         }
     }
@@ -59,7 +66,7 @@ enum APIRouter:URLRequestConvertible {
         urlRequest.setValue("MacOS", forHTTPHeaderField: "Platform")
         urlRequest.setValue("MacOS", forHTTPHeaderField: "Device")
         
-        print("URLLL",url)
+        print("URLLL",urlRequest.url)
         return urlRequest
     }
     private func dictionaryToQueryParams(_ dictionary: [String: Any]) -> [URLQueryItem] {

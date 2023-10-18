@@ -20,12 +20,18 @@ class HomeInteractor:NewsfeedBusinessLogic {
             }
         case .getVacancies:
             self.presenter?.presentData(response: .presentFooterLoader)
-            service.getActiveVacancies { (activeVacancies) in
-                self.presenter?.presentData(response: .presentVacancies(activeVacancies: activeVacancies))
+            service.getVacancies { (vacancies, isVacanciesFiltered)  in
+                self.presenter?.presentData(response: .presentVacancies(vacancies: vacancies, isFiltered: isVacanciesFiltered))
             }
         case .getNextBatch:
-            service.getNextBatch { (activeVacancies) in
-                self.presenter?.presentData(response: .presentVacancies(activeVacancies: activeVacancies))
+            service.getNextBatch { (vacancies,isVacanciesFiltered)  in
+                self.presenter?.presentData(response: .presentVacancies(vacancies: vacancies, isFiltered: isVacanciesFiltered))
+            }
+        case .setParams(params: let params):
+            self.presenter?.presentData(response: .presentFooterLoader)
+            service.setParams(params: params)
+            service.getVacancies { (vacancies, isVacanciesFiltered) in
+                self.presenter?.presentData(response: .presentVacancies(vacancies: vacancies, isFiltered: isVacanciesFiltered))
             }
         }
     }
