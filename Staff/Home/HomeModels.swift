@@ -20,7 +20,7 @@ enum Home {
     struct Response {
       enum ResponseType {
           case presentHome(home:HomeResponse)
-          case presentVacancies(vacancies:VacanciesResponse, isFiltered:Bool)
+          case presentVacancies(vacancies:VacanciesResponse)
           case presentFooterLoader
       }
     }
@@ -51,7 +51,6 @@ struct HomeViewModel {
     let cities: [FilterPickerRow]
 }
 struct VacanciesViewModel {
-    var isVacanciesFiltered:Bool
     struct VacancyCell:VacancyCellViewModel {
         var name: String
         

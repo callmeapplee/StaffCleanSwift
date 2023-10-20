@@ -29,11 +29,11 @@ class HomePresenter:HomePresentationLogic {
             allCities.insert(HomeViewModel.FilterPickerRow.init(name: "По умолчанию".localized()), at: 0)
             allCategories.insert(HomeViewModel.FilterPickerRow.init(name: "По умолчанию".localized()), at: 0)
             viewController?.displayData(viewModel: .displayHome(homeViewModel:HomeViewModel.init(topCompanies: topCompanies, topCategories: topCategories, categories: allCategories,cities: allCities) ))
-        case .presentVacancies(let vacancies, let isFiltered):
+        case .presentVacancies(let vacancies):
             let vacanciesForPresent = vacancies.data.map { vacancy in
                 vacancyCellViewModel(vacancy: vacancy)
             }
-            viewController?.displayData(viewModel: .displayVacancies(vacancies: VacanciesViewModel(isVacanciesFiltered: isFiltered, vacancies: vacanciesForPresent)))
+            viewController?.displayData(viewModel: .displayVacancies(vacancies: VacanciesViewModel( vacancies: vacanciesForPresent)))
             
         case .presentFooterLoader:
             viewController?.displayData(viewModel: .displayFooterLoader)

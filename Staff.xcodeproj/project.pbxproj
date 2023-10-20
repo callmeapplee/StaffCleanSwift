@@ -38,7 +38,7 @@
 		FACA43F82ACF246A0052ECDB /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACA43F72ACF246A0052ECDB /* FilterView.swift */; };
 		FACA43FB2AD064E00052ECDB /* TopCategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACA43FA2AD064E00052ECDB /* TopCategoriesTableViewCell.swift */; };
 		FACA43FE2AD06BA80052ECDB /* TopCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACA43FD2AD06BA80052ECDB /* TopCategoryCollectionViewCell.swift */; };
-		FAE31D5E2AD6EA5A00726C75 /* LabelImageStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE31D5D2AD6EA5A00726C75 /* LabelImageStackView.swift */; };
+		FAD6AB572ADFB71600C8B065 /* HomeFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD6AB562ADFB71600C8B065 /* HomeFilterView.swift */; };
 		FAEFC1922ADC0065001AE507 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEFC1912ADC0065001AE507 /* NetworkService.swift */; };
 		FAEFC1942ADC0997001AE507 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEFC1932ADC0997001AE507 /* API.swift */; };
 		FAEFC1962ADC13F9001AE507 /* NetworkDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEFC1952ADC13F9001AE507 /* NetworkDataFetcher.swift */; };
@@ -108,7 +108,7 @@
 		FACA43F72ACF246A0052ECDB /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		FACA43FA2AD064E00052ECDB /* TopCategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopCategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		FACA43FD2AD06BA80052ECDB /* TopCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
-		FAE31D5D2AD6EA5A00726C75 /* LabelImageStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelImageStackView.swift; sourceTree = "<group>"; };
+		FAD6AB562ADFB71600C8B065 /* HomeFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterView.swift; sourceTree = "<group>"; };
 		FAEFC1912ADC0065001AE507 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		FAEFC1932ADC0997001AE507 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		FAEFC1952ADC13F9001AE507 /* NetworkDataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDataFetcher.swift; sourceTree = "<group>"; };
@@ -305,7 +305,7 @@
 			isa = PBXGroup;
 			children = (
 				FACA43F22ACEEDBE0052ECDB /* SearchTableViewCell.swift */,
-				FACA43F72ACF246A0052ECDB /* FilterView.swift */,
+				FAD6AB562ADFB71600C8B065 /* HomeFilterView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -330,7 +330,7 @@
 		FAE31D5C2AD6E95100726C75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FAE31D5D2AD6EA5A00726C75 /* LabelImageStackView.swift */,
+				FACA43F72ACF246A0052ECDB /* FilterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -602,6 +602,7 @@
 				FACA43FB2AD064E00052ECDB /* TopCategoriesTableViewCell.swift in Sources */,
 				FACA43D32ACEC8FB0052ECDB /* HomeModels.swift in Sources */,
 				FAEFC1962ADC13F9001AE507 /* NetworkDataFetcher.swift in Sources */,
+				FAD6AB572ADFB71600C8B065 /* HomeFilterView.swift in Sources */,
 				FACA439B2ACEC3000052ECDB /* AppDelegate.swift in Sources */,
 				FAEFC1922ADC0065001AE507 /* NetworkService.swift in Sources */,
 				FACA43D62ACECBA90052ECDB /* HomeViewController.swift in Sources */,
@@ -611,7 +612,6 @@
 				FA071E182ADD4E1900680732 /* FooterView.swift in Sources */,
 				FACA43F32ACEEDBE0052ECDB /* SearchTableViewCell.swift in Sources */,
 				FACA43F62ACEF2F80052ECDB /* StaffColors.swift in Sources */,
-				FAE31D5E2AD6EA5A00726C75 /* LabelImageStackView.swift in Sources */,
 				FACA43ED2ACED59A0052ECDB /* ProfileIconView.swift in Sources */,
 				FAC968762ADC51F800EE4894 /* HomePresenter.swift in Sources */,
 				FA071E152ADD318200680732 /* VacanciesResponse.swift in Sources */,

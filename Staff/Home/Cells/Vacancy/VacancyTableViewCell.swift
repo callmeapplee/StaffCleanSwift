@@ -44,36 +44,26 @@ class VacancyTableViewCell: UITableViewCell {
         label.text = "Alif-Academy"
         return label
     }()
-    private var ratingHStackView:UIStackView = {
+    private var ratingLabel:UILabel = {
         let label = UILabel()
         label.text = "4.5"
         label.font = .systemFont(ofSize: 12, weight: .regular)
-        
-        let imageView = UIImageView(image: UIImage(named: "star"))
-        imageView.contentMode = .scaleAspectFit
-        
-        let stackView = StackViewWithLabelImage()
-        stackView.label = label
-        stackView.image = imageView
-        stackView.addArrangedSubview(label)
-        stackView.addArrangedSubview(imageView)
+        return label
+    }()
+    private var ratingHStackView:UIStackView = {
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 4
         return stackView
     }()
-    private var cityHStackView:StackViewWithLabelImage = {
+    private var cityLabel:UILabel = {
         let label = UILabel()
         label.text = "Dushanbe"
         label.font = .systemFont(ofSize: 12, weight: .regular)
-        
-        let imageView = UIImageView(image: UIImage(named: "location_gray"))
-        imageView.contentMode = .scaleAspectFit
-        
-        let stackView = StackViewWithLabelImage()
-        stackView.label = label
-        stackView.image = imageView
-        stackView.addArrangedSubview(label)
-        stackView.addArrangedSubview(imageView)
+        return label
+    }()
+    private var cityHStackView:UIStackView = {
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 4
         return stackView
@@ -97,7 +87,7 @@ class VacancyTableViewCell: UITableViewCell {
         return label
     }()
     private var salaryHStackView:UIStackView = {
-        let stackView = StackViewWithLabelImage()
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 2.5
         return stackView
@@ -129,12 +119,26 @@ class VacancyTableViewCell: UITableViewCell {
         scheduleHStackView.addArrangedSubview(imageView)
         scheduleHStackView.addArrangedSubview(scheduleLabel)
     }
+    private func setupCityHStack() {
+        let imageView = UIImageView(image: UIImage(named: "location_gray"))
+        imageView.contentMode = .scaleAspectFit
+        cityHStackView.addArrangedSubview(cityLabel)
+        cityHStackView.addArrangedSubview(imageView)
+    }
+    private func setupRatingHStack() {
+        let imageView = UIImageView(image: UIImage(named: "star"))
+        imageView.contentMode = .scaleAspectFit
+        ratingHStackView.addArrangedSubview(ratingLabel)
+        ratingHStackView.addArrangedSubview(imageView)
+    }
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
         selectionStyle = .none
         setupScheduleHStack()
         setupSalaryHStack()
+        setupCityHStack()
+        setupRatingHStack()
         makeConstraints()
     }
     
@@ -198,3 +202,4 @@ class VacancyTableViewCell: UITableViewCell {
         
     }
 }
+

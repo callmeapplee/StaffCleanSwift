@@ -19,6 +19,13 @@ class FilterView: UIView {
     private var categoryPicker = UIPickerView()
     private var categories:[HomeViewModel.FilterPickerRow] = []
     private var cities:[HomeViewModel.FilterPickerRow] = []
+    var viewsHStack:UIStackView = {
+       let stackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
     var delegate:FilterViewDelegate?
     private var cityTextField:UITextField = {
         let textField = UITextField()
@@ -49,13 +56,6 @@ class FilterView: UIView {
         cityView.layer.cornerRadius = 8
         return cityView
     }()
-    private var filterButton:UIButton = {
-        let button = UIButton(frame: CGRect(origin: .zero, size: CGSize(width: 33, height: 33)))
-        button.backgroundColor = UIColor(red: 0.49, green: 0.92, blue: 0.06, alpha: 1)
-        button.layer.cornerRadius = 8
-        button.setImage(UIImage(named: "filter"), for: .normal)
-        return button
-    }()
     private func setupPickers() {
         categoryPicker.delegate = self
         categoryPicker.dataSource = self
@@ -64,7 +64,7 @@ class FilterView: UIView {
         cityPicker.dataSource = self
         cityTextField.inputView = cityPicker
     }
-    func setupToolBar(){
+    private func setupToolBar(){
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
@@ -89,6 +89,9 @@ class FilterView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.StaffColors.primary
+        setupViewsHStack()
+        setupCityView()
+        setupCategoryView()
         setupToolBar()
         setupPickers()
         makeConstraints()
@@ -136,26 +139,14 @@ class FilterView: UIView {
             make.width.equalTo(7)
         }
     }
-    private func makeConstraints() {
-        setupCityView()
-        setupCategoryView()
-        addSubview(cityView)
-        addSubview(categoryView)
-        addSubview(filterButton)
-        cityView.snp.makeConstraints { make in
-            make.left.top.bottom.equalToSuperview().inset(5)
-            make.width.equalTo(cityView.frame.width)
-        }
-        categoryView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(5)
-            make.left.equalTo(cityView.snp.right).inset(-10)
-        }
-        filterButton.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(5)
-            make.right.equalToSuperview().inset(5)
-            make.left.equalTo(categoryView.snp.right).inset(-10)
-            make.height.equalTo(filterButton.frame.height)
-            make.width.equalTo(filterButton.frame.width)
+    private func setupViewsHStack() {
+        viewsHStack.addArrangedSubview(cityView)
+        viewsHStack.addArrangedSubview(categoryView)
+    }
+    func makeConstraints() {
+        addSubview(viewsHStack)
+        viewsHStack.snp.makeConstraints { make in
+            make.left.right.top.bottom.equalToSuperview().inset(5)
         }
     }
     @objc func closeInputViews() {

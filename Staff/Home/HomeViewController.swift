@@ -19,7 +19,7 @@ enum HomeTableViewSections:CaseIterable  {
 class HomeViewController: UIViewController,HomeDisplayLogic{
     private var homeViewModel:HomeViewModel = HomeViewModel(topCompanies: [],
                                                             topCategories: [], categories: [],cities: [])
-    private var vacanciesViewModel:VacanciesViewModel = VacanciesViewModel(isVacanciesFiltered: false, vacancies: [])
+    private var vacanciesViewModel:VacanciesViewModel = VacanciesViewModel( vacancies: [])
     var interactor: NewsfeedBusinessLogic?
     @IBOutlet weak var tableView: UITableView!
     private var refreshControl: UIRefreshControl = {
@@ -76,7 +76,6 @@ class HomeViewController: UIViewController,HomeDisplayLogic{
         case .displayVacancies(vacancies: let vacancies):
             self.vacanciesViewModel = vacancies
             tableView.reloadData()
-            footerView.hideLoader()
         case .displayFooterLoader:
             footerView.showLoader()
         }

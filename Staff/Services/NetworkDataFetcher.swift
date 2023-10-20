@@ -14,7 +14,7 @@ protocol DataFetcher {
 class NetworkDataFetcher:DataFetcher {
     func getFilteredVacancies(page: Int, params:[String:Any], response completion: @escaping (VacanciesResponse?) -> Void) {
         NetworkService.sessionManager.request(APIRouter.filteredVacancies(page: page, filterParams: params)).responseDecodable(of:VacanciesResponseWrapped.self) { response in
-            print("LOGGGG",String(data: response.data ?? Data(), encoding: .utf8))
+            //print("LOGGGG",String(data: response.data ?? Data(), encoding: .utf8))
             switch response.result {
             case .success(let data):
                 completion(data.response)

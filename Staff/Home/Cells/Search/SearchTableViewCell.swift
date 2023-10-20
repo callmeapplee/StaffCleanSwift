@@ -18,8 +18,8 @@ class SearchTableViewCell: UITableViewCell {
         searchBar.tintColor = UIColor.StaffColors.primary
         return searchBar
     }()
-    var filterView:FilterView = {
-        let filterView = FilterView(frame: CGRect(origin: .zero, size: CGSize(width: .zero, height: 43)))
+    var filterView:HomeFilterView = {
+        let filterView = HomeFilterView(frame: CGRect(origin: .zero, size: CGSize(width: .zero, height: 43)))
         filterView.layer.cornerRadius = 12
         return filterView
     }()

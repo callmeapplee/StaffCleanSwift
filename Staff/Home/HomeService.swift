@@ -15,7 +15,7 @@ class HomeService {
     private var isVacanciesFiltered:Bool {
         return !filterParams.isEmpty
     }
-    func setParams(params:[String:Any?]) {
+    func setFilterParams(params:[String:Any?]) {
         params.forEach { (paramsKey,paramsValue) in
             guard let value = paramsValue else {
                 self.filterParams.removeValue(forKey: paramsKey)
@@ -41,7 +41,7 @@ class HomeService {
             completion(filteredVacanciesResponse)
         }
     }
-    func getVacancies( completion: @escaping(VacanciesResponse,Bool)->Void) {
+    func getVacancies( completion: @escaping(VacanciesResponse)->Void) {
         currentPage = 1
         let isFiltered = self.isVacanciesFiltered
         if isFiltered {
@@ -51,7 +51,7 @@ class HomeService {
                 }
                 self.isFetchingMore = vacanciesResponse.data.isEmpty
                 self.vacanciesResponse = vacanciesResponse
-                completion(vacanciesResponse,isFiltered)
+                completion(vacanciesResponse)
             }
         }else{
             getActiveVacancies { activeVacanciesResponse in
@@ -60,11 +60,11 @@ class HomeService {
                 }
                 self.isFetchingMore = vacanciesResponse.data.isEmpty
                 self.vacanciesResponse = vacanciesResponse
-                completion(vacanciesResponse,isFiltered)
+                completion(vacanciesResponse)
             }
         }
     }
-    func getNextBatch(completion: @escaping (VacanciesResponse,Bool) -> Void) {
+    func getNextBatch(completion: @escaping (VacanciesResponse) -> Void) {
         let isFiltered = self.isVacanciesFiltered
         print("current page",currentPage)
         if !isFetchingMore {
@@ -77,6 +77,10 @@ class HomeService {
                     }
                     self.vacanciesResponse?.data.append(contentsOf: vacanciesResponse.data)
                     self.isFetchingMore = vacanciesResponse.data.isEmpty
+                    guard let vacancyResponseToSend = self.vacanciesResponse else {
+                        return
+                    }
+                    completion(vacancyResponseToSend)
                 }
             }else{
                 getActiveVacancies { activeVacanciesResponse in
@@ -85,10 +89,13 @@ class HomeService {
                     }
                     self.vacanciesResponse?.data.append(contentsOf: vacanciesResponse.data)
                     self.isFetchingMore = vacanciesResponse.data.isEmpty
+                    guard let vacancyResponseToSend = self.vacanciesResponse else {
+                        return
+                    }
+                    completion(vacancyResponseToSend)
                 }
             }
         }
-        guard let vacanciesResponse = self.vacanciesResponse else { return }
-        completion(vacanciesResponse,isFiltered)
+        
     }
 }
